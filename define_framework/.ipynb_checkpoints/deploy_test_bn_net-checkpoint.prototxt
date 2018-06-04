@@ -1,0 +1,30 @@
+name: "test_bn_net"
+input: "data"
+input_dim: 1
+input_dim: 3
+input_dim: 3
+layer {
+  name: "data_bn"
+  type: "BatchNorm"
+  bottom: "data"
+  top: "out"
+  batch_norm_param {
+    use_global_stats: true
+    eps: 1e-05
+  }
+}
+layer {
+  name: "data_scale"
+  type: "Scale"
+  bottom: "out"
+  top: "out"
+  scale_param {
+    filler {
+      value: 1
+    }
+    bias_term: true
+    bias_filler {
+      value: 0
+    }
+  }
+}

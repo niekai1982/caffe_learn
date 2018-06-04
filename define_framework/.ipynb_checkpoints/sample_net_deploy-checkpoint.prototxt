@@ -1,0 +1,104 @@
+name:"test_net"
+input:"data"
+input_dim:1
+input_dim:3
+input_dim:20
+input_dim:20
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "Convolution1"
+  convolution_param {
+    num_output: 2
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    group: 1
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "conv1_batchnorm"
+  type: "BatchNorm"
+  bottom: "Convolution1"
+  top: "BatchNorm1"
+  batch_norm_param {
+    use_global_stats: true
+    eps: 1e-05
+  }
+}
+layer {
+  name: "con1_batchnorm_relu"
+  type: "ReLU"
+  bottom: "BatchNorm1"
+  top: "ReLU1"
+}
+layer {
+  name: "conv2_dw"
+  type: "Convolution"
+  bottom: "ReLU1"
+  top: "Convolution2"
+  convolution_param {
+    num_output: 2
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    group: 2
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "conv2_dw_batchnorm"
+  type: "BatchNorm"
+  bottom: "Convolution2"
+  top: "BatchNorm2"
+  batch_norm_param {
+    use_global_stats: true
+    eps: 1e-05
+  }
+}
+layer {
+  name: "conv2"
+  type: "Convolution"
+  bottom: "BatchNorm2"
+  top: "Convolution3"
+  convolution_param {
+    num_output: 2
+    bias_term: false
+    pad: 0
+    kernel_size: 1
+    group: 1
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "flatten"
+  type: "Flatten"
+  bottom: "Convolution3"
+  top: "Flatten1"
+  flatten_param {
+    axis: 1
+  }
+}
+layer {
+  name: "fc"
+  type: "InnerProduct"
+  bottom: "Flatten1"
+  top: "InnerProduct1"
+  inner_product_param {
+    num_output: 4
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}

@@ -24,6 +24,7 @@ def sample_net():
     conv2_dw_batchnorm = L.BatchNorm(conv2_dw, name='conv2_dw_batchnorm', eps=1e-5, use_global_stats=1)
     #conv2_dw_relu = L.ReLU(conv2_dw_batchnorm, name='con2_batchnorm_relu')
     conv2 = L.Convolution(conv2_dw_batchnorm, name='conv2',kernel_size=1, num_output=2, stride=1, pad=0, bias_term=False, group=1, weight_filler=dict(type='xavier') )
+    conv2_perm = L.Permute(conv2, name="conv2_perm", order=(1,0))
     flatten = L.Flatten(conv2,name='flatten', axis=1)
     fc = L.InnerProduct(flatten, name='fc', num_output=4, weight_filler=dict(type='xavier'))
     # prob = L.SoftMax(fc,name='softmax')
